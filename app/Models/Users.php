@@ -14,7 +14,7 @@ class Users extends Model
 
     protected $table = 'users';
 
-    public function getAllUsers($filters = [], $keywords = null, $sortByArr = null){
+    public function getAllUsers($filters = [], $keywords = null, $sortByArr = null, $perPage = null ){
         //$users = DB::select('SELECT * FROM users ORDER BY create_at DESC');
         //DB::enableQueryLog();
         $users = DB::table($this->table)
@@ -48,8 +48,12 @@ class Users extends Model
             });
         }
 
-        $users = $users->get();
-
+        if (!empty($perPage)){
+            $users = $users->paginate($perPage)->withQueryString(); //$perPage bản ghi trên 1 trang
+        }else{
+            $users = $users->get();
+        }
+        
         //$sql = DB::getQueryLog();
         return $users;
     }
