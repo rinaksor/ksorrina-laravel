@@ -19,7 +19,8 @@ class Users extends Model
         //DB::enableQueryLog();
         $users = DB::table($this->table)
         ->select('users.*', 'groups.name as group_name')
-        ->join('groups', 'user.groups_id', '=', 'groups.id');
+        ->join('groups', 'user.groups_id', '=', 'groups.id')
+        ->where('trash', 0);
         //->orderBy('users.create_at', 'DESC');
 
 
@@ -77,7 +78,8 @@ class Users extends Model
     }
 
     public function deleteUser($id){
-        return DB::delete("DELETE FROM $this->table WHERE id=?", [$id]);
+        //return DB::delete("DELETE FROM $this->table WHERE id=?", [$id]);
+        return DB::table($this->table)->where('id', $id)->update($id);
     }
 
     public function statemenUser($sql){
